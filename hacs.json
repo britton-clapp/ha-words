@@ -1,5 +1,5 @@
 {
-    "name": "jokes",
+    "name": "words",
     "hacs": "0.0.1",
     "homeassistant": "2022.11.1"
 }

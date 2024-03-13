@@ -1,0 +1,3 @@
+"""Words constants."""
+
+DOMAIN = "words"

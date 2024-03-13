@@ -1,7 +1,9 @@
-"""Provides random jokes."""
+"""Provides random words."""
+import random
 
 from .const import DOMAIN
 import aiohttp
+import aiofiles
 import asyncio
 from datetime import timedelta
 from homeassistant.config_entries import ConfigEntry
@@ -12,10 +14,10 @@ import logging
 
 _LOGGER = logging.getLogger(__name__)
 
-# def set_joke(hass: HomeAssistant, text: str):
-#     """Helper function to set the random joke."""
-#     _LOGGER.debug("set_joke")
-#     hass.states.async_set("jokes.random_joke", text)
+# def set_word(hass: HomeAssistant, text: str):
+#     """Helper function to set the random word."""
+#     _LOGGER.debug("set_word")
+#     hass.states.async_set("words.random_word", text)
 
 def setup(hass: HomeAssistant, config: dict):
     """This setup does nothing, we use the async setup."""
@@ -27,7 +29,7 @@ async def async_setup(hass: HomeAssistant, config: dict):
     _LOGGER.debug("async_setup")
     
     #`config` is the full dict from `configuration.yaml`.
-    #set_joke(hass, "")
+    #set_word(hass, "")
 
     return True
 
@@ -35,7 +37,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     """Setup from Config Flow Result."""
     _LOGGER.debug("async_setup_entry")
     
-    coordinator = JokeUpdateCoordinator(
+    coordinator = WordUpdateCoordinator(
         hass,
         _LOGGER,
         update_interval=timedelta(seconds=60)
@@ -49,7 +51,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     hass.async_create_task(async_load_platform(hass, "sensor", DOMAIN, {}, entry))
     return True
 
-class JokeUpdateCoordinator(DataUpdateCoordinator):
+class WordUpdateCoordinator(DataUpdateCoordinator):
     """Update handler."""
 
     def __init__(self, hass, logger, update_interval=None):
@@ -65,23 +67,13 @@ class JokeUpdateCoordinator(DataUpdateCoordinator):
         )
         
     async def _async_update_data(self):
-        """Fetch a random joke."""
+        """Fetch a random word."""
         self.logger.debug("_async_update_data")
-        
-        #get a random joke (finally)
+
+        # open a csv file called words.csv and read a random line
         try:
-            headers = {
-                'Accept': 'application/json',
-                'User-Agent': 'Jokes custom integration for Home Assistant (https://github.com/LaggAt/ha-jokes)'
-            }
-            async with aiohttp.ClientSession() as session:
-                async with session.get('https://icanhazdadjoke.com/', headers=headers) as resp:
-                    if resp.status == 200:
-                        json = await resp.json()
-                        #set_joke(self._hass, json["joke"])
-                        # return the joke object
-                        return json
-                    else:
-                        raise UpdateFailed(f"Response status code: {resp.status}")
+            async with aiofiles.open("words.csv", mode='r') as file:
+                lines = await file.readlines()
+                return random.choice(lines)
         except Exception as ex:
             raise UpdateFailed from ex

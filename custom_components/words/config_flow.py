@@ -1,11 +1,11 @@
-"""Config flow for Jokes integration."""
+"""Config flow for Words integration."""
 
 from .const import DOMAIN
 from homeassistant import config_entries
 
 @config_entries.HANDLERS.register(DOMAIN)
-class JokesFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
-    """Handle a config flow for Jokes."""
+class WordsFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
+    """Handle a config flow for Words."""
 
     VERSION = 1
     CONNECTION_CLASS = config_entries.CONN_CLASS_CLOUD_POLL
@@ -13,6 +13,6 @@ class JokesFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     async def async_step_user(self, user_input=None):
         """Show config Form step."""
         return self.async_create_entry(
-            title="jokes config",
+            title="words config",
             data={},
         )

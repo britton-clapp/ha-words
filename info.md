@@ -2,21 +2,21 @@
 ![Project Maintenance][maintenance-shield]
 [![BuyMeCoffee][buymecoffeebadge]][buymecoffee]
 
-_Example Component providing fresh jokes every minute._
+_Example Component providing fresh words every minute._
 
 **This component will set up the following platforms.**
 
 Platform | Description
 -- | --
-`sensor` | Random joke.
+`sensor` | Random word.
 
 <!-- ![example][exampleimg] -->
 
 {% if not installed %}
 ## Installation
 
-1. In HACS/Integrations, search for 'Jokes' and click install.
-1. In the HA UI go to "Configuration" -> "Integrations" click "+" and search for "Jokes".
+1. In HACS/Integrations, search for 'Words' and click install.
+1. In the HA UI go to "Configuration" -> "Integrations" click "+" and search for "Words".
 
 {% endif %}
 

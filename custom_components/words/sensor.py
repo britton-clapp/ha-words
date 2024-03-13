@@ -1,4 +1,4 @@
-"""Joke Sensor."""
+"""Word Sensor."""
 
 from .const import DOMAIN
 from homeassistant import core
@@ -9,9 +9,9 @@ async def async_setup_platform(
 ):
     """Setup the sensor platform."""
     coordinator = hass.data[DOMAIN]["coordinator"]
-    async_add_entities([JokeEntity(coordinator)], True)
+    async_add_entities([WordEntity(coordinator)], True)
 
-class JokeEntity(CoordinatorEntity):
+class WordEntity(CoordinatorEntity):
     """Dummy entity to trigger updates."""
 
     _attr_icon = "mdi:emoticon-excited-outline"
@@ -23,17 +23,17 @@ class JokeEntity(CoordinatorEntity):
     @property
     def entity_id(self):
         """Return the entity id of the sensor."""
-        return "sensor.random_joke"
+        return "sensor.random_word"
 
     @property
     def name(self):
         """Return the name of the sensor."""
-        return "Random Joke"
+        return "Random Word"
 
     @property
     def state(self):
         """Return the state of the sensor."""
-        return self.coordinator.data["joke"]
+        return self.coordinator.data["word"]
 
     @property
     def extra_state_attributes(self):

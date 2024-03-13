@@ -1,5 +1,5 @@
 {
-    "name": "Jokes devcontainer",
+    "name": "Words devcontainer",
     
 	//image can be the latest public dev container, 
 	//or some locally build dev container based on https://github.com/LaggAt/ha-devcontainer
@@ -32,7 +32,7 @@
     //how to run the container, network mode, privileged, volumes, ...
     "runArgs": [
 		"--name",
-		"devcontainer_jokes",
+		"devcontainer_words",
 		"--network",
 		"host",
 		"--privileged",
