@@ -14,7 +14,7 @@ async def async_setup_platform(
 class WordEntity(CoordinatorEntity):
     """Dummy entity to trigger updates."""
 
-    _attr_icon = "mdi:emoticon-excited-outline"
+    _attr_icon = "mdi:head-lightbulb"
 
     def __init__(self, coordinator: DataUpdateCoordinator):
         """Pass coordinator to CoordinatorEntity."""

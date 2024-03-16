@@ -1,4 +1,5 @@
 """Provides random words."""
+import os
 import random
 
 from .const import DOMAIN
@@ -70,10 +71,38 @@ class WordUpdateCoordinator(DataUpdateCoordinator):
         """Fetch a random word."""
         self.logger.debug("_async_update_data")
 
-        # open a csv file called words.csv and read a random line
-        try:
-            async with aiofiles.open("words.csv", mode='r') as file:
-                lines = await file.readlines()
-                return random.choice(lines)
-        except Exception as ex:
-            raise UpdateFailed from ex
+        string = \
+"""\
+word	definition
+abase	to humiliate, degrade
+abate	to reduce, lessen
+abdicate	to give up a position, usually one of leadership
+abduct	to kidnap, take by force
+aberration	a state or condition markedly different from the norm
+abet	to aid, help, encourage
+abhor	to hate, detest
+abide	to put up with, tolerate
+abject	cast down in spirit, showing hopelessness or resignation
+abjure	to reject, renounce
+abnegation	denial of comfort to oneself
+abort	to give up on a half-finished project or effort
+abridge	to reduce, diminish
+test_word	this is a test definition
+"""
+
+        # # Read the first line of csv file
+        # header_line = await file.readline()
+        #
+        # # convert tsv header line to a list of strings
+        # header = header_line.split('\t')
+
+        # lines = await file.readlines()
+        lines = string.split('\n')
+        lines = list(filter(None, lines))
+        header = lines.pop(0).split('\t')
+
+        word_line = random.choice(lines)
+        word_data = word_line.split('\t')
+        word = dict(zip(header, word_data))
+        return word
+
