@@ -32,7 +32,7 @@
     //how to run the container, network mode, privileged, volumes, ...
     "runArgs": [
 		"--name",
-		"devcontainer_words",
+		"devcontainer_jokes",
 		"--network",
 		"host",
 		"--privileged",
