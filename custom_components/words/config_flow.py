@@ -9,11 +9,13 @@ import logging
 
 _LOGGER = logging.getLogger(__name__)
 
-DEFAULT_UPDATE_INTERVAL = 10  # Default update interval in minutes
+DEFAULT_UPDATE_INTERVAL = 3  # Default update interval in minutes
 
 DATA_SCHEMA = vol.Schema({
     vol.Required("file_path"): str,
-    vol.Required("update_interval", default=DEFAULT_UPDATE_INTERVAL): vol.All(vol.Coerce(int), vol.Range(min=1))
+    vol.Required(
+        "update_interval",
+        default=DEFAULT_UPDATE_INTERVAL): vol.All(vol.Coerce(int), vol.Range(min=1, max=60))
 })
 
 

@@ -1,4 +1,5 @@
 import asyncio
+import csv
 import random
 import unittest
 
@@ -13,29 +14,12 @@ async def _async_update_data(self):
 
     # open a csv file called words.csv and read a random line
     try:
-        async with aiofiles.open("words.csv", mode='r') as file:
-            string = \
-"""\
-Word	Definition
-abase	to humiliate, degrade
-abate	to reduce, lessen
-abdicate	to give up a position, usually one of leadership
-test_word   this is a test definition
-"""
+        with open('words.csv', 'r', newline='') as csvfile:
+            reader = csv.reader(csvfile, delimiter='\t')
+            header = next(reader)  # Skip the header line
 
-            # # Read the first line of csv file
-            header_line = await file.readline()
-            #
-            # # convert tsv header line to a list of strings
-            # header = header_line.split('\t')
-
-            # lines = await file.readlines()
-            lines = string.split('\n')
-            lines = list(filter(None, lines))
-            header = lines.pop(0).split('\t')
-
-            word_line = random.choice(lines)
-            word_data = word_line.split('\t')
+            data = list(reader)
+            word_data = random.choice(data)
             word = dict(zip(header, word_data))
             return word
     except Exception as ex:

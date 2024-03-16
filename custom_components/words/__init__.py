@@ -1,11 +1,9 @@
 """Provides random words."""
+import csv
 import os
 import random
 
 from .const import DOMAIN
-import aiohttp
-import aiofiles
-import asyncio
 from datetime import timedelta
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import callback, HomeAssistant
@@ -14,6 +12,7 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 import logging
 
 _LOGGER = logging.getLogger(__name__)
+
 
 # def set_word(hass: HomeAssistant, text: str):
 #     """Helper function to set the random word."""
@@ -25,32 +24,35 @@ def setup(hass: HomeAssistant, config: dict):
     _LOGGER.debug("setup")
     return True
 
+
 async def async_setup(hass: HomeAssistant, config: dict):
     """Setup from configuration.yaml."""
     _LOGGER.debug("async_setup")
-    
-    #`config` is the full dict from `configuration.yaml`.
-    #set_word(hass, "")
+
+    # `config` is the full dict from `configuration.yaml`.
+    # set_word(hass, "")
 
     return True
+
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     """Setup from Config Flow Result."""
     _LOGGER.debug("async_setup_entry")
-    
+
     coordinator = WordUpdateCoordinator(
         hass,
         _LOGGER,
         update_interval=timedelta(seconds=60)
     )
     await coordinator.async_refresh()
-    
+
     hass.data[DOMAIN] = {
         "coordinator": coordinator
     }
-    
+
     hass.async_create_task(async_load_platform(hass, "sensor", DOMAIN, {}, entry))
     return True
+
 
 class WordUpdateCoordinator(DataUpdateCoordinator):
     """Update handler."""
@@ -59,6 +61,10 @@ class WordUpdateCoordinator(DataUpdateCoordinator):
         """Initialize global data updater."""
         logger.debug("__init__")
 
+        # config_entry = self.config_entry
+        # if update_interval is None:
+        #     update_interval = config_entry.options.get("update_interval")
+        #
         super().__init__(
             hass,
             logger,
@@ -66,48 +72,22 @@ class WordUpdateCoordinator(DataUpdateCoordinator):
             update_interval=update_interval,
             update_method=self._async_update_data,
         )
-        
+
     async def _async_update_data(self):
         """Fetch a random word."""
         self.logger.debug("_async_update_data")
         config_entry = self.config_entry
 
-        string = \
-"""\
-word	definition
-abase	to humiliate, degrade
-abate	to reduce, lessen
-abdicate	to give up a position, usually one of leadership
-abduct	to kidnap, take by force
-aberration	a state or condition markedly different from the norm
-abet	to aid, help, encourage
-abhor	to hate, detest
-abide	to put up with, tolerate
-abject	cast down in spirit, showing hopelessness or resignation
-abjure	to reject, renounce
-abnegation	denial of comfort to oneself
-abort	to give up on a half-finished project or effort
-abridge	to reduce, diminish
-test_word	this is a test definition
-"""
-        self.logger.error("!!!!!!!!!! ============================================= !!!!!!!!!!!!!!!!!!!!!")
-        self.logger.error(config_entry)
-        self.logger.error(config_entry.options)
-        self.logger.error(config_entry.options.get("update_interval"))
-        self.logger.error(config_entry.options.get("file_path"))
-        # # Read the first line of csv file
-        # header_line = await file.readline()
-        #
-        # # convert tsv header line to a list of strings
-        # header = header_line.split('\t')
+        # self.logger.error(config_entry.options.get("update_interval"))
+        # self.logger.error(config_entry.options.get("file_path"))
 
-        # lines = await file.readlines()
-        lines = string.split('\n')
-        lines = list(filter(None, lines))
-        header = lines.pop(0).split('\t')
+        with open(config_entry.options.get("file_path"), 'r', newline='') as csvfile:
+            reader = csv.reader(csvfile, delimiter='\t')
+            header = next(reader)  # Skip the header line
 
-        word_line = random.choice(lines)
-        word_data = word_line.split('\t')
-        word = dict(zip(header, word_data))
-        return word
-
+            data = list(reader)
+            word_data = random.choice(data)
+            self.logger.debug(word_data)
+            word = dict(zip(header, word_data))
+            self.logger.debug(word)
+            return word

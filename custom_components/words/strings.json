@@ -1,0 +1,18 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "data": {
+          "file_path": "Full path to the csv file containing the list of words",
+          "update_interval": "Update Interval (in minutes)"
+        }
+      }
+    },
+    "error": {
+      "already_configured": "Device is already configured"
+    },
+    "abort": {
+      "already_configured": "Not sure what to put here"
+    }
+  }
+}
