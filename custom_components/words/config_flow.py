@@ -1,7 +1,13 @@
 """Config flow for Words integration."""
+import os
+from typing import Dict
+
 import voluptuous as vol
 from .const import DOMAIN
 from homeassistant import config_entries
+import logging
+
+_LOGGER = logging.getLogger(__name__)
 
 DEFAULT_UPDATE_INTERVAL = 10  # Default update interval in minutes
 
@@ -20,7 +26,23 @@ class WordsFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     CONNECTION_CLASS = config_entries.CONN_CLASS_CLOUD_POLL
 
     async def async_step_user(self, user_input=None):
+        _LOGGER.info(user_input)
+        errors: Dict[str, str] = {}
         if user_input is not None:
             # Validate and store user input
-            return self.async_create_entry(title="Words", data=user_input)
-        return self.async_show_form(step_id="user", data_schema=DATA_SCHEMA)
+            if os.path.isfile(user_input['file_path']):
+                return self.async_create_entry(
+                    title="Words",
+                    data={},
+                    options={
+                        "file_path": user_input["file_path"],
+                        "update_interval": user_input["update_interval"]
+                    }
+                )
+            else:
+                errors["base"] = "invalid path"
+        # @TODO: Verify that it's a csv file.
+        # @TODO: Verify that it has multiple lines.
+        # @TODO: Verify that it has columns for word and definition.
+
+        return self.async_show_form(step_id="user", data_schema=DATA_SCHEMA, errors=errors)

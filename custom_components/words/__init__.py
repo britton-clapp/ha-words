@@ -70,6 +70,7 @@ class WordUpdateCoordinator(DataUpdateCoordinator):
     async def _async_update_data(self):
         """Fetch a random word."""
         self.logger.debug("_async_update_data")
+        config_entry = self.config_entry
 
         string = \
 """\
@@ -89,7 +90,11 @@ abort	to give up on a half-finished project or effort
 abridge	to reduce, diminish
 test_word	this is a test definition
 """
-
+        self.logger.error("!!!!!!!!!! ============================================= !!!!!!!!!!!!!!!!!!!!!")
+        self.logger.error(config_entry)
+        self.logger.error(config_entry.options)
+        self.logger.error(config_entry.options.get("update_interval"))
+        self.logger.error(config_entry.options.get("file_path"))
         # # Read the first line of csv file
         # header_line = await file.readline()
         #
