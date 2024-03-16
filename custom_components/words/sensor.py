@@ -3,6 +3,9 @@
 from .const import DOMAIN
 from homeassistant import core
 from homeassistant.helpers.update_coordinator import CoordinatorEntity, DataUpdateCoordinator
+import logging
+
+_LOGGER = logging.getLogger(__name__)
 
 async def async_setup_platform(
     hass: core.HomeAssistant, config, async_add_entities, discovery_info=None
@@ -33,6 +36,7 @@ class WordEntity(CoordinatorEntity):
     @property
     def state(self):
         """Return the state of the sensor."""
+        _LOGGER.debug(self.coordinator.data)
         return self.coordinator.data["word"]
 
     @property

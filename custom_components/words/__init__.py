@@ -89,5 +89,7 @@ class WordUpdateCoordinator(DataUpdateCoordinator):
             word_data = random.choice(data)
             self.logger.debug(word_data)
             word = dict(zip(header, word_data))
+            word["word"] = word["word"].strip()
+            word["definition"] = word["definition"].strip()
             self.logger.debug(word)
             return word
